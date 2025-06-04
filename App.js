@@ -12,13 +12,17 @@ import { FaXTwitter } from "react-icons/fa6";
 import ArticlesSection from './components/ArticlesSection'; 
 import UpcomingEvents from './components/UpcomingEvents';
 import PastEventsSection from './components/PastEventsSection';
+
+
+
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Admin from './components/Admin';
 
+function ImarikaFoundation() {
 
 
-
-
-const ImarikaFoundation = () => {
+  const Home = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -224,7 +228,6 @@ const ImarikaFoundation = () => {
       {/* Events */}
       <UpcomingEvents />
       <PastEventsSection />
-      <Admin />
 
 
        {/* Get Involved */}
@@ -365,5 +368,18 @@ const ImarikaFoundation = () => {
     </div>
   );
 };
+
+
+ return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </Router>
+  );
+}
+
+
 
 export default ImarikaFoundation;

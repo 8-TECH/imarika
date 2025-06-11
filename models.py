@@ -11,7 +11,7 @@ class Article(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(max_length=500)
     event_date = models.DateField()
     location = models.CharField(max_length=255)
 

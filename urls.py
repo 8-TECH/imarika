@@ -1,20 +1,14 @@
+from django.contrib import admin
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import (
-    ArticleViewSet,
-    UpcomingEventsAPIView,
-    PastEventsAPIView,
-    ContactMessageViewSet,
-    CreateEventWithImages,
-)
-
-router = DefaultRouter()
-router.register(r'articles', ArticleViewSet)
-router.register(r'contact', ContactMessageViewSet)
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('events/upcoming/', UpcomingEventsAPIView.as_view(), name='upcoming-events'),
-    path('events/past/', PastEventsAPIView.as_view(), name='past-events'),
-    path('events/create-with-images/', CreateEventWithImages.as_view(), name='create-event-with-images'),
+    path('admin/', admin.site.urls),
+    path('', include('imarikapp.urls')),  # Replace 'api' with your actual app name if different
+    path('api/', include('imarikapp.urls'))
 ]
+
+# Serving media files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

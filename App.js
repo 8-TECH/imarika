@@ -183,11 +183,11 @@ function ImarikaFoundation() {
   <h2 className="text-3xl font-semibold text-center mb-10 text-gray-800">About Us</h2>
   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
     {[
-      { img: "Education-1.jpg", text: "Education" },
-      { img: "Health-1.jpg", text: "Health" },
-      { img: "environment.jpg", text: "Environment" },
-      { img: "agrbsn.jpg", text: "Agribusiness" },
-      { img: "Disaster-1.jpg", text: "Disaster" },
+      { img: "ima1.webp", text: "Education" },
+      { img: "ima2.jpg", text: "Health" },
+      { img: "ima3.jpg", text: "Environment" },
+      { img: "ima1.webp", text: "Agribusiness" },
+      { img: "ima2.jpg", text: "Disaster" },
     ].map((item, index) => (
       <div key={index} className="text-center">
         <div className="group relative w-20 h-20 mx-auto rounded-full overflow-hidden border-4 border-white glowing-ring animate-spin-slow hover:animate-none transition-transform duration-500">

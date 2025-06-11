@@ -57,12 +57,15 @@ const PastEventsSection = () => {
                 </Swiper>
               </div>
               <div className="p-4 h-48">
-                <h3 className="text-xl font-semibold text-gray-800">{event.title}</h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  {new Date(event.event_date).toDateString()} • {event.location}
-                </p>
-                <p className="mt-2 text-gray-700 text-sm">{event.description}</p>
+              <h3 className="text-xl font-semibold text-gray-800">{event.title}</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                {new Date(event.event_date).toDateString()} • {event.location}
+              </p>
+              <div className="mt-2 text-gray-700 text-sm h-24 overflow-y-auto pr-1">
+                {event.description}
               </div>
+            </div>
+
             </div>
           </SwiperSlide>
         ))}

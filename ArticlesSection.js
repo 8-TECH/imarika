@@ -70,9 +70,11 @@ const ArticlesSection = () => {
             <h3 className="text-3xl font-bold text-blue-700 mb-6">
               {articles.find(a => a.id === expandedId)?.title}
             </h3>
-            <p className="text-gray-700 whitespace-pre-line text-lg">
-              {articles.find(a => a.id === expandedId)?.content}
-            </p>
+            
+            <div
+              className="text-gray-700 whitespace-pre-line text-lg"
+              dangerouslySetInnerHTML={{ __html: articles.find(a => a.id === expandedId)?.content }}
+            />
             <div className="mt-6 text-right">
               <button
                 onClick={() => toggleExpand(expandedId)}
@@ -84,19 +86,22 @@ const ArticlesSection = () => {
           </article>
         ) : (
           <div
-            className="flex space-x-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200"
+            className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200 snap-x"
             style={{ scrollBehavior: 'smooth' }}
           >
             {articles.map(article => (
               <div
                 key={article.id}
-                className="bg-white rounded-xl shadow-sm border hover:shadow-md transition p-6 flex-shrink-0 min-w-[320px] flex flex-col justify-between"
+                className="bg-white rounded-xl shadow-sm border hover:shadow-md transition p-6 flex-shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[30vw] xl:w-[22vw] snap-start"
               >
+
                 <div>
                   <h3 className="text-xl font-semibold text-blue-700 mb-3">{article.title}</h3>
-                  <p className="text-gray-700 text-sm whitespace-pre-line">
-                    {truncateText(article.content)}
-                  </p>
+              
+                   <div
+                className="prose prose-sm text-blue-900 max-h-40 overflow-hidden"
+                dangerouslySetInnerHTML={{ __html: truncateText(article.content) }}
+              />
                 </div>
 
                 <div className="mt-4 text-right">

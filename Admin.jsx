@@ -2,6 +2,29 @@ import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+// Confirmation Dialog Component
+const ConfirmationDialog = ({ message, onConfirm, onCancel }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md text-center">
+      <p className="mb-4 text-lg text-gray-800">{message}</p>
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={onConfirm}
+          className="bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-700"
+        >
+          Yes, I'm sure
+        </button>
+        <button
+          onClick={onCancel}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded-xl hover:bg-gray-400"
+        >
+          No, take me back
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState('events');
 
@@ -20,14 +43,23 @@ export default function AdminPage() {
   const [articles, setArticles] = useState([]);
   const [editingArticleId, setEditingArticleId] = useState(null);
 
+  // Confirmation Dialog State
+  const [confirmDialog, setConfirmDialog] = useState({ show: false, type: null, id: null });
+
   const fetchEvents = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/events/');
-      if (!res.ok) throw new Error('Failed to fetch events');
-      const data = await res.json();
-      setEvents(data);
+      const [upcomingRes, pastRes] = await Promise.all([
+        fetch('http://localhost:8000/api/events/upcoming/'),
+        fetch('http://localhost:8000/api/events/past/'),
+      ]);
+      if (!upcomingRes.ok || !pastRes.ok) throw new Error('Failed to fetch events');
+      const [upcomingEvents, pastEvents] = await Promise.all([
+        upcomingRes.json(),
+        pastRes.json(),
+      ]);
+      setEvents([...upcomingEvents, ...pastEvents]);
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching events:', error);
     }
   };
 
@@ -56,7 +88,7 @@ export default function AdminPage() {
     formData.append('description', description);
     formData.append('event_date', eventDate);
     formData.append('location', location);
-    images.forEach(img => formData.append('images', img));
+    images.forEach((img) => formData.append('images', img));
 
     const url = editingEventId
       ? `http://localhost:8000/api/events/${editingEventId}/`
@@ -64,16 +96,8 @@ export default function AdminPage() {
     const method = editingEventId ? 'PUT' : 'POST';
 
     try {
-      const res = await fetch(url, {
-        method,
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(JSON.stringify(errorData));
-      }
-
+      const res = await fetch(url, { method, body: formData });
+      if (!res.ok) throw new Error('Error submitting event');
       fetchEvents();
       resetEventForm();
     } catch (error) {
@@ -100,12 +124,28 @@ export default function AdminPage() {
     }
   };
 
+  const deleteArticle = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:8000/api/articles/${id}/`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete article');
+      fetchArticles();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const editEvent = (event) => {
     setTitle(event.title);
     setDescription(event.description);
     setEventDate(event.event_date);
     setLocation(event.location);
     setEditingEventId(event.id);
+  };
+
+  const editArticle = (article) => {
+    setArticleTitle(article.title);
+    setContent(article.content);
+    setEditingArticleId(article.id);
   };
 
   const handleArticleSubmit = async (e) => {
@@ -124,11 +164,7 @@ export default function AdminPage() {
         body: JSON.stringify(articleData),
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(JSON.stringify(errorData));
-      }
-
+      if (!res.ok) throw new Error('Error submitting article');
       fetchArticles();
       resetArticleForm();
     } catch (error) {
@@ -142,20 +178,15 @@ export default function AdminPage() {
     setEditingArticleId(null);
   };
 
-  const deleteArticle = async (id) => {
-    try {
-      const res = await fetch(`http://localhost:8000/api/articles/${id}/`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Failed to delete article');
-      fetchArticles();
-    } catch (error) {
-      console.error(error);
-    }
+  const handleDelete = (type, id) => {
+    setConfirmDialog({ show: true, type, id });
   };
 
-  const editArticle = (article) => {
-    setArticleTitle(article.title);
-    setContent(article.content);
-    setEditingArticleId(article.id);
+  const confirmDelete = () => {
+    const { type, id } = confirmDialog;
+    if (type === 'event') deleteEvent(id);
+    else if (type === 'article') deleteArticle(id);
+    setConfirmDialog({ show: false, type: null, id: null });
   };
 
   return (
@@ -183,8 +214,8 @@ export default function AdminPage() {
         </div>
 
         {activeTab === 'events' && (
-          <div>
-            <form onSubmit={handleEventSubmit} encType="multipart/form-data" className="space-y-4 mb-6">
+          <>
+            <form onSubmit={handleEventSubmit} className="space-y-4 mb-6" encType="multipart/form-data">
               <h2 className="text-xl font-semibold text-darkblue-900">Create / Edit Event</h2>
               <input
                 type="text"
@@ -232,38 +263,23 @@ export default function AdminPage() {
             <h3 className="text-lg font-semibold text-blue-900 mb-2">All Events</h3>
             <ul className="space-y-2">
               {events.map((event) => (
-                <li
-                  key={event.id}
-                  className="bg-sky-50 p-4 rounded-xl shadow flex justify-between items-center"
-                >
+                <li key={event.id} className="bg-sky-50 p-4 rounded-xl shadow flex justify-between items-center">
                   <div>
                     <p className="font-bold text-blue-800">{event.title}</p>
-                    <p className="text-sm text-blue-600">
-                      {event.event_date} - {event.location}
-                    </p>
+                    <p className="text-sm text-blue-600">{event.event_date} - {event.location}</p>
                   </div>
                   <div className="space-x-2">
-                    <button
-                      onClick={() => editEvent(event)}
-                      className="text-sky-700 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => deleteEvent(event.id)}
-                      className="text-orange-600 hover:underline"
-                    >
-                      Delete
-                    </button>
+                    <button onClick={() => editEvent(event)} className="text-sky-700 hover:underline">Edit</button>
+                    <button onClick={() => handleDelete('event', event.id)} className="text-orange-600 hover:underline">Delete</button>
                   </div>
                 </li>
               ))}
             </ul>
-          </div>
+          </>
         )}
 
         {activeTab === 'articles' && (
-          <div>
+          <>
             <form onSubmit={handleArticleSubmit} className="space-y-4 mb-6">
               <h2 className="text-xl font-semibold text-darkblue-900">Create / Edit Article</h2>
               <input
@@ -274,16 +290,8 @@ export default function AdminPage() {
                 className="w-full p-2 border border-blue-300 rounded-xl"
                 required
               />
-              <ReactQuill
-                theme="snow"
-                value={content}
-                onChange={setContent}
-                className="bg-white"
-              />
-              <button
-                type="submit"
-                className="bg-sky-500 text-white px-4 py-2 rounded-xl hover:bg-sky-600"
-              >
+              <ReactQuill theme="snow" value={content} onChange={setContent} className="bg-white" />
+              <button type="submit" className="bg-sky-500 text-white px-4 py-2 rounded-xl hover:bg-sky-600">
                 {editingArticleId ? 'Update Article' : 'Create Article'}
               </button>
             </form>
@@ -291,35 +299,26 @@ export default function AdminPage() {
             <h3 className="text-lg font-semibold text-blue-900 mb-2">All Articles</h3>
             <ul className="space-y-2">
               {articles.map((article) => (
-                <li
-                  key={article.id}
-                  className="bg-sky-50 p-4 rounded-xl shadow flex justify-between items-center"
-                >
+                <li key={article.id} className="bg-sky-50 p-4 rounded-xl shadow flex justify-between items-center">
                   <div>
                     <p className="font-bold text-blue-800">{article.title}</p>
-                    <div
-                      className="text-sm text-blue-600 max-h-24 overflow-hidden"
-                      dangerouslySetInnerHTML={{ __html: article.content }}
-                    />
                   </div>
                   <div className="space-x-2">
-                    <button
-                      onClick={() => editArticle(article)}
-                      className="text-sky-700 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => deleteArticle(article.id)}
-                      className="text-orange-600 hover:underline"
-                    >
-                      Delete
-                    </button>
+                    <button onClick={() => editArticle(article)} className="text-sky-700 hover:underline">Edit</button>
+                    <button onClick={() => handleDelete('article', article.id)} className="text-orange-600 hover:underline">Delete</button>
                   </div>
                 </li>
               ))}
             </ul>
-          </div>
+          </>
+        )}
+
+        {confirmDialog.show && (
+          <ConfirmationDialog
+            message="Are you sure you want to delete this item?"
+            onConfirm={confirmDelete}
+            onCancel={() => setConfirmDialog({ show: false, type: null, id: null })}
+          />
         )}
       </div>
     </div>

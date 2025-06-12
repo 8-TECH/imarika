@@ -12,6 +12,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import ArticlesSection from './components/ArticlesSection'; 
 import UpcomingEvents from './components/UpcomingEvents';
 import PastEventsSection from './components/PastEventsSection';
+import ActionButtons from './components/ActionButtons';
 
 
 
@@ -228,27 +229,8 @@ function ImarikaFoundation() {
       {/* Events */}
       <UpcomingEvents />
       <PastEventsSection />
+      <ActionButtons />
 
-
-       {/* Get Involved */}
-      <section id="get-involved" className="py-16 px-6 bg-gray-50" data-aos="fade-up">
-        <h2 className="text-3xl font-semibold text-center mb-10 text-gray-800">Get Involved</h2>
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {[
-            { title: "Volunteer", desc: "Be part of our mission by giving your time and skills." },
-            { title: "Donate", desc: "Support our cause financially to reach more communities." },
-            { title: "Partner", desc: "Collaborate with us in implementing sustainable programs." },
-          ].map((opt, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-              <h3 className="text-xl font-bold text-blue-700 mb-2">{opt.title}</h3>
-              <p className="text-gray-600">{opt.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-
-      
 
       {/* Contact */}
       <section id="contact" className="py-16 px-6 bg-white" data-aos="fade-up">

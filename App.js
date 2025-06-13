@@ -13,12 +13,11 @@ import ArticlesSection from './components/ArticlesSection';
 import UpcomingEvents from './components/UpcomingEvents';
 import PastEventsSection from './components/PastEventsSection';
 import ActionButtons from './components/ActionButtons';
-
-
-
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Admin from './components/Admin';
+import AboutSection from "./components/AboutSection";
+import BoardSection from "./components/BoardSection";
+
 
 function ImarikaFoundation() {
 
@@ -63,7 +62,9 @@ function ImarikaFoundation() {
               alt="Imarika Logo"
               className="h-10"
             />
-            <span className="text-xl font-bold text-gray-800">Imarika Foundation</span>
+          <span className="text-xl font-bold text-gray-800">
+            Imarika <span className="text-orange-500">Foundation</span>
+          </span>
           </div>
 
           {/* Desktop Navigation */}
@@ -179,32 +180,9 @@ function ImarikaFoundation() {
         </div>
       </section>
 
-      {/* About Us */}
-      <section id="about" className="py-16 px-6 bg-white" data-aos="fade-up">
-  <h2 className="text-3xl font-semibold text-center mb-10 text-gray-800">About Us</h2>
-  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
-    {[
-      { img: "ima1.webp", text: "Education" },
-      { img: "ima2.jpg", text: "Health" },
-      { img: "ima3.jpg", text: "Environment" },
-      { img: "ima1.webp", text: "Agribusiness" },
-      { img: "ima2.jpg", text: "Disaster" },
-    ].map((item, index) => (
-      <div key={index} className="text-center">
-        <div className="group relative w-20 h-20 mx-auto rounded-full overflow-hidden border-4 border-white glowing-ring animate-spin-slow hover:animate-none transition-transform duration-500">
-          <img
-            src={`images/${item.img}`}
-            alt={item.text}
-            className="rounded-full w-full h-full object-cover transform group-hover:scale-125 transition-transform duration-500"
-          />
-        </div>
-        <p className="text-gray-800 font-medium mt-2">{item.text}</p>
-      </div>
-    ))}
-  </div>
-</section>
+      <AboutSection />
+      <BoardSection />
 
-      
 
       {/* Programs */}
       <section id="programs" className="py-16 px-6 bg-gray-50" data-aos="fade-up">

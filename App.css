@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* App styling */
 .App {
   text-align: center;
 }
@@ -32,6 +33,7 @@
   color: #61dafb;
 }
 
+/* Keyframes */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -39,4 +41,25 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes spin-slow {
+  0% {
+    box-shadow: 0 0 0px rgba(255, 166, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 166, 0, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(255, 166, 0, 0.7);
+  }
+}
+
+/* Utility classes */
+.animate-spin-slow {
+  animation: spin-slow 3s ease-in-out infinite;
+}
+
+.glowing-ring {
+  box-shadow: 0 0 8px rgba(255, 166, 0, 0.6);
 }

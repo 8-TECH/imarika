@@ -54,7 +54,7 @@ const ActionButtons = () => {
   };
 
   return (
-    <section id="get-involved" className="py-16 px-6 bg-gray-50">
+    <section id="get-involved" className="py-16 px-6 bg-gray-50 scroll-mt-20">
       <h2 className="text-3xl font-semibold text-center mb-10 text-gray-800">Get Involved</h2>
       <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {[
@@ -105,8 +105,8 @@ const ActionButtons = () => {
               {formType.toLowerCase() === "donate" ? (
                 <>
                   <p className="text-sm text-gray-700">
-                    <strong>Paybill:</strong> 832897 &nbsp; | &nbsp;
-                    <strong>Account:</strong> Your Name
+                    <strong>Paybill:</strong> <span className="text-orange-600">832897</span> &nbsp; | &nbsp;
+                    <strong>Account:</strong> <span className="text-orange-600">Your Name</span>
                   </p>
                   <input
                     type="text"

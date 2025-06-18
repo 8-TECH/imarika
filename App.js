@@ -17,6 +17,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Admin from './components/Admin';
 import AboutSection from "./components/AboutSection";
 import BoardSection from "./components/BoardSection";
+import 'swiper/css';
+import 'swiper/css/autoplay';
+import 'swiper/css/navigation';
+import PartnerForm from "./components/PartnerForm";
 
 
 function ImarikaFoundation() {
@@ -24,6 +28,7 @@ function ImarikaFoundation() {
 
   const Home = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -55,106 +60,59 @@ function ImarikaFoundation() {
 
       {/* Header */}
       <header className="bg-white shadow sticky top-0 z-50">
-        <div className="flex justify-between items-center px-6 py-4">
-          <div className="flex items-center space-x-2">
-            <img
-              src="/images/imarikalogo.jpeg"
-              alt="Imarika Logo"
-              className="h-10"
-            />
-          <span className="text-xl font-bold text-gray-800">
-            Imarika <span className="text-orange-500">Foundation</span>
-          </span>
-          </div>
+  <div className="flex justify-between items-center px-6 py-2"> {/* Reduced py from 4 to 2 */}
+    <div className="flex items-center space-x-3">
+      <img
+        src="/images/imarikalogo.jpeg"
+        alt="Imarika Logo"
+        className="h-16" // Increased from h-12 to h-16
+      />
+      <span className="text-xl md:text-2xl font-bold text-gray-800">
+         Imarika <span className="text-orange-500">Foundation</span>
+      </span>
 
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-6 text-gray-700 font-medium">
-            <li>
-              <a href="#about" className="hover:text-orange-600">
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#programs" className="hover:text-orange-600">
-                Programs
-              </a>
-            </li>
-            <li>
-              <a href="#articles" className="hover:text-orange-600">
-                Articles
-              </a>
-            </li>
-            <li>
-              <a href="#events" className="hover:text-orange-600">
-                Events
-              </a>
-            </li>
-            <li>
-              <a href="#get-involved" className="hover:text-orange-600">
-                Get Involved
-              </a>
-            </li>
-            <li>
-              <a href="#contact" className="hover:text-orange-600">
-                Contact
-              </a>
-            </li>
-          </ul>
+    </div>
 
-          {/* Mobile Hamburger */}
-          <button className="md:hidden text-gray-700 focus:outline-none" onClick={toggleMobileMenu}>
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
+    {/* Desktop Navigation */}
+    <ul className="hidden md:flex space-x-6 text-gray-700 font-medium text-lg">
+      <li><a href="#about" className="hover:text-orange-600">About</a></li>
+      <li><a href="#programs" className="hover:text-orange-600">Programs</a></li>
+      <li><a href="#articles" className="hover:text-orange-600">Articles</a></li>
+      <li><a href="#events" className="hover:text-orange-600">Events</a></li>
+      <li><a href="#get-involved" className="hover:text-orange-600">Get Involved</a></li>
+      <li><a href="#contact" className="hover:text-orange-600">Contact</a></li>
+    </ul>
 
-        {/* Mobile Nav */}
-        {isMobileMenuOpen && (
-          <ul className="md:hidden flex flex-col space-y-4 px-6 pb-4 text-gray-700 font-medium bg-white border-t border-gray-200">
-            <li>
-              <a href="#about" onClick={toggleMobileMenu}>
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#programs" onClick={toggleMobileMenu}>
-                Programs
-              </a>
-            </li>
-            <li>
-              <a href="#articles" onClick={toggleMobileMenu}>
-                Articles
-              </a>
-            </li>
-            <li>
-              <a href="#events" onClick={toggleMobileMenu}>
-                Events
-              </a>
-            </li>
-            <li>
-              <a href="#get-involved" onClick={toggleMobileMenu}>
-                Get Involved
-              </a>
-            </li>
-            <li>
-              <a href="#contact" onClick={toggleMobileMenu}>
-                Contact
-              </a>
-            </li>
-          </ul>
+    {/* Mobile Hamburger */}
+    <button className="md:hidden text-gray-700 focus:outline-none" onClick={toggleMobileMenu}>
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {isMobileMenuOpen ? (
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        ) : (
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         )}
-      </header>
+      </svg>
+    </button>
+  </div>
+
+  {/* Mobile Nav */}
+  {isMobileMenuOpen && (
+    <ul className="md:hidden flex flex-col space-y-4 px-6 pb-4 text-gray-700 font-medium bg-white border-t border-gray-200">
+      <li><a href="#about" onClick={toggleMobileMenu}>About</a></li>
+      <li><a href="#programs" onClick={toggleMobileMenu}>Programs</a></li>
+      <li><a href="#articles" onClick={toggleMobileMenu}>Articles</a></li>
+      <li><a href="#events" onClick={toggleMobileMenu}>Events</a></li>
+      <li><a href="#get-involved" onClick={toggleMobileMenu}>Get Involved</a></li>
+      <li><a href="#contact" onClick={toggleMobileMenu}>Contact</a></li>
+    </ul>
+  )}
+</header>
 
       {/* Hero Section */}
       <section className="bg-blue-50 text-center py-20 px-4">
@@ -185,7 +143,7 @@ function ImarikaFoundation() {
 
 
       {/* Programs */}
-      <section id="programs" className="py-16 px-6 bg-gray-50" data-aos="fade-up">
+      <section id="programs" className="py-16 px-6 bg-gray-50 scroll-mt-20" data-aos="fade-up">
         <h2 className="text-3xl font-semibold text-center mb-10 text-gray-800">Our Programs</h2>
         <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {[
@@ -208,10 +166,10 @@ function ImarikaFoundation() {
       <UpcomingEvents />
       <PastEventsSection />
       <ActionButtons />
-
+      <PartnerForm />
 
       {/* Contact */}
-      <section id="contact" className="py-16 px-6 bg-white" data-aos="fade-up">
+      <section id="contact" className="py-16 px-6 bg-white scroll-mt-20" data-aos="fade-up">
         <h2 className="text-3xl font-semibold text-center mb-6 text-gray-800">Contact Us</h2>
 
         

@@ -11,7 +11,7 @@ const UpcomingEvents = () => {
   }, []);
 
   return (
-    <section id="events" className="py-16 px-6 bg-white" data-aos="fade-up">
+    <section id="events" className="py-16 px-6 bg-white scroll-mt-20" data-aos="fade-up">
       <h2 className="text-3xl font-semibold text-center mb-8 text-gray-800">Upcoming Events</h2>
 
       {events.length === 0 ? (
